@@ -1,0 +1,12 @@
+<configuration>
+    <!-- Test-only logging. Shows our DEBUG logs in unit tests. Safe to delete once the code is understood. -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%-5level %logger{0} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="com.sample.coinchange" level="DEBUG"/>
+    <root level="WARN">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

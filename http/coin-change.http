@@ -1,0 +1,62 @@
+### Valid bill: 200 with the coins to give
+POST http://localhost:8080/api/change
+Content-Type: application/json
+
+{ "bill": 5 }
+
+### Bill not accepted: 400 "Invalid bill"
+POST http://localhost:8080/api/change
+Content-Type: application/json
+
+{ "bill": 3 }
+
+### Not enough coins ($100 is more than the machine holds): 409
+POST http://localhost:8080/api/change
+Content-Type: application/json
+
+{ "bill": 100 }
+
+### Field missing: 400 "bill is required"
+POST http://localhost:8080/api/change
+Content-Type: application/json
+
+{}
+
+### Null: 400 "bill is required"
+POST http://localhost:8080/api/change
+Content-Type: application/json
+
+{ "bill": null }
+
+### Empty string: 400
+POST http://localhost:8080/api/change
+Content-Type: application/json
+
+{ "bill": "" }
+
+### Special characters: 400
+POST http://localhost:8080/api/change
+Content-Type: application/json
+
+{ "bill": "5$" }
+
+### Decimal: 400 (not cut to 5)
+POST http://localhost:8080/api/change
+Content-Type: application/json
+
+{ "bill": 5.5 }
+
+### Number as a string: 400 (not converted)
+POST http://localhost:8080/api/change
+Content-Type: application/json
+
+{ "bill": "5" }
+
+### Broken JSON: 400
+POST http://localhost:8080/api/change
+Content-Type: application/json
+
+{ "bill":
+
+### Wrong HTTP method: 405
+GET http://localhost:8080/api/balance

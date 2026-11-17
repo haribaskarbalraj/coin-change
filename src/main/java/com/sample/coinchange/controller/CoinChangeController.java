@@ -1,26 +1,35 @@
 package com.sample.coinchange.controller;
 
-import com.sample.coinchange.dto.CoinType;
+import com.sample.coinchange.dto.ChangeRequest;
+import com.sample.coinchange.dto.ChangeResponse;
+import com.sample.coinchange.dto.CoinCount;
+import com.sample.coinchange.service.ChangeService;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.Map;
+import java.util.List;
 
-@RestController
+
 @Slf4j
+@RestController
+@RequiredArgsConstructor
+@RequestMapping(value = "/api", produces = MediaType.APPLICATION_JSON_VALUE)
 public class CoinChangeController {
 
-    @GetMapping(value = "/api/change/{bill}",
-                produces = MediaType.APPLICATION_JSON_VALUE)
-    public Map<CoinType, Integer> calculateChange(@PathVariable Integer bill) {
-        log.info("Calculating change for {}", bill);
-        return Map.of(
-                CoinType.QUARTER, 2,
-                CoinType.DIME, 5,
-                CoinType.NICKEL, 20
-        );
+    private final ChangeService changeService;
+
+    /** POST, Dispenses the Change and update the server state (uses up coins) */
+    @PostMapping(value = "/change", consumes = MediaType.APPLICATION_JSON_VALUE)
+    public ChangeResponse calculateChange(@Valid @RequestBody ChangeRequest request) {
+        log.info("POST /api/change bill={}", request.getBill());
+        return changeService.dispenseChange(request.getBill());
     }
+
 }
